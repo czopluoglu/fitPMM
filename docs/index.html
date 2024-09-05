@@ -1542,6 +1542,111 @@ ul.task-list{list-style: none;}
 
 
 
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } 
+code span.an { color: #008000; } 
+code span.at { } 
+code span.bu { } 
+code span.cf { color: #0000ff; } 
+code span.ch { color: #008080; } 
+code span.cn { } 
+code span.co { color: #008000; } 
+code span.cv { color: #008000; } 
+code span.do { color: #008000; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.im { } 
+code span.in { color: #008000; } 
+code span.kw { color: #0000ff; } 
+code span.op { } 
+code span.ot { color: #ff4000; } 
+code span.pp { color: #ff4000; } 
+code span.sc { color: #008080; } 
+code span.ss { color: #008080; } 
+code span.st { color: #008080; } 
+code span.va { } 
+code span.vs { color: #008080; } 
+code span.wa { color: #008000; font-weight: bold; } 
+.sourceCode .row {
+width: 100%;
+}
+.sourceCode {
+overflow-x: auto;
+}
+.code-folding-btn {
+margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -1735,10 +1840,41 @@ background-color: #33C1FF;
 border-color: #97CAEF;
 }
 </style>
-<p>[Updated: Thu, Sep 05, 2024 - 14:19:55 ]</p>
+<p>[Updated: Thu, Sep 05, 2024 - 14:36:55 ]</p>
 <p><font color="black"></p>
-<div id="introduction" class="section level1">
-<h1>Introduction</h1>
+<div id="installing-and-loading-support-libraries-and-source-files" class="section level1">
+<h1>Installing and loading support libraries and source files</h1>
+<p>This tutorial demonstrates how to fit the model described in the
+paper using the R routine we wrote. This routine can be found under the
+[<a href="https://github.com/czopluoglu/fitPMM/tree/main/code">/code</a>
+folder in the associated <a href="https://github.com/czopluoglu/fitPMM">GitHub repository</a>.</p>
+<ol style="list-style-type: decimal">
+<li>Please download the R routine directly from the following link to a
+local folder in your computer.</li>
+</ol>
+<p><a href="https://raw.githubusercontent.com/czopluoglu/fitPMM/main/code/fitPMM.R">https://raw.githubusercontent.com/czopluoglu/fitPMM/main/code/fitPMM.R</a></p>
+<p>After you download the file, load it to your R working environment by
+using the <code>source()</code> function.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">source</span>(<span class="fu">here</span>(<span class="st">&#39;code/fitPMM.R&#39;</span>))</span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>Then, you will also need to load a number of R packages as the R
+routine depends on some functions from these R packages. If you don’t
+have these packages, first intall them, and then load them all in your R
+environment.</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>    <span class="co"># install.packages(&quot;segmented&quot;,dependencies=TRUE)</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>    <span class="co"># install.packages(&quot;glmmML&quot;,dependencies=TRUE)</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="co"># install.packages(&quot;MCMCpack&quot;,dependencies=TRUE)</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="co"># install.packages(&quot;psych&quot;,dependencies=TRUE)</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="co"># install.packages(&quot;MBESS&quot;,dependencies=TRUE)</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="co"># install.packages(&quot;gdata&quot;,dependencies=TRUE)</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>    <span class="fu">require</span>(segmented)   <span class="co"># Fitting piecewise model to individual data, used to obtain start values</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>    <span class="fu">require</span>(glmmML)      <span class="co"># Using &quot;ghq()&quot; function</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="fu">require</span>(MCMCpack)    <span class="co"># Using &quot;xpnd()&quot; function        </span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    <span class="fu">require</span>(psych)       <span class="co"># Using &quot;cor.smooth()&quot; function</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>    <span class="fu">require</span>(MBESS)       <span class="co"># Using &quot;cor2cov()&quot; function</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>    <span class="fu">require</span>(gdata)       <span class="co"># Using &quot;write.fwf()&quot; function</span></span></code></pre></div>
 <p></font></p>
 </div>
 

@@ -60,9 +60,38 @@ options(scipen=99)
 
 <font color="black">
 
-# Introduction
+# Installing and loading support libraries and source files
 
+This tutorial demonstrates how to fit the model described in the paper using the R routine we wrote. This routine can be found under the [[/code](https://github.com/czopluoglu/fitPMM/tree/main/code) folder in the associated [GitHub repository](https://github.com/czopluoglu/fitPMM). 
 
+1) Please download the R routine directly from the following link to a local folder in your computer.
+
+[https://raw.githubusercontent.com/czopluoglu/fitPMM/main/code/fitPMM.R](https://raw.githubusercontent.com/czopluoglu/fitPMM/main/code/fitPMM.R)
+
+After you download the file, load it to your R working environment by using the `source()` function. 
+
+```{r}
+source(here('code/fitPMM.R'))
+```
+
+2) Then, you will also need to load a number of R packages as the R routine depends on some functions from these R packages. If you don't have these packages, first intall them, and then load them all in your R environment.
+
+```{r}
+	# install.packages("segmented",dependencies=TRUE)
+	# install.packages("glmmML",dependencies=TRUE)
+	# install.packages("MCMCpack",dependencies=TRUE)
+	# install.packages("psych",dependencies=TRUE)
+	# install.packages("MBESS",dependencies=TRUE)
+	# install.packages("gdata",dependencies=TRUE)
+
+	require(segmented)   # Fitting piecewise model to individual data, used to obtain start values
+	require(glmmML)      # Using "ghq()" function
+	require(MCMCpack)    # Using "xpnd()" function        
+	require(psych)       # Using "cor.smooth()" function
+	require(MBESS)       # Using "cor2cov()" function
+	require(gdata)       # Using "write.fwf()" function
+
+```
 
 
 </font>
