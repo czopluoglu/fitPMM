@@ -1,0 +1,70 @@
+---
+title: Fitting a finite mixture of piecewise mixed-effect models with unknown random knots
+subtitle:
+author:
+  name: Cengiz Zopluoglu
+  affiliation: University of Oregon
+date: 09/5/2024
+output: 
+  html_document:
+    keep_md: false
+    theme: journal
+    highlight: haddock
+    code_folding: show
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+always_allow_html: true
+urlcolor: blue
+mainfont: cochineal
+sansfont: Fira Sans
+monofont: Fira Code ## Although, see: https://tex.stackexchange.com/q/294362
+
+## Automatically knit to both formats:
+knit: (function(inputFile, encoding) {
+ rmarkdown::render(inputFile, encoding = encoding, 
+ output_format = 'all') 
+ })
+---
+
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy(position=c('top','right'),color='#33C1FF')
+```
+
+
+<style>
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    z-index: 2;
+    color: #fff;
+    background-color: #33C1FF;
+    border-color: #97CAEF;
+}
+
+</style>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(comment = "",fig.align='center',message = FALSE,warning = FALSE)
+require(here)
+require(ggplot2)
+require(plot3D)
+require(kableExtra)
+require(knitr)
+require(giski)
+require(magick)
+options(scipen=99)
+
+```
+
+`r paste('[Updated:',format(Sys.time(),'%a, %b %d, %Y - %H:%M:%S'),']')`
+
+<font color="black">
+
+# Introduction
+
+
+
+
+</font>
+
+
