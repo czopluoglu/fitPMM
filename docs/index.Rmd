@@ -60,11 +60,11 @@ options(scipen=99)
 
 <font color="black">
 
-#1. Overview
+# 1. Overview
 
 This tutorial demonstrates how to fit a finite mixture of piecewise mixed-effect models with unknown random knots using the R routine developed as described in [in our paper](https://github.com/czopluoglu/fitPMM/blob/main/paper/2015_Kohli%2C%20Harring%2C%20%26%20Zopluoglu.pdf). The R routine can be found in the [GitHub repository](https://github.com/czopluoglu/fitPMM) under the `/code` folder.
 
-#2. Installation and Setup
+# 2. Installation and Setup
 
 ## 2.1 Download and Source the R Routine
 
@@ -102,7 +102,7 @@ The routine depends on several R packages. If these are not installed, use insta
 
 ```
 
-## 3. Loading the dataset
+# 3. Loading the dataset
 
 We will use a random subsample of [The Early Childhood Longitudinal Study (ECLS-K)](http://nces.ed.gov/ecls/) . This dataset tracks children's progress from kindergarten through eighth grade. The time vector (`tvec`) represents specific intervals in the study.
 
@@ -133,7 +133,7 @@ The time points represent:
 - 5.5 --- 5th Grade (spring)
 - 8.5 --- 8th Grade (spring)
 
-## 4. Generate starting values for the algorithm
+# 4. Generate starting values for the algorithm
 
 The algorithm is sensitive to starting values. To improve convergence, we'll estimate initial parameters (intercepts, slopes, knots, and residual variance) by fitting piecewise models to each individual's data. These estimates will then be passed into the main model fitting function.
 
@@ -189,7 +189,7 @@ head(ind_par) 	   # Preview of individual estimates
 ```
 
 
-## 5. Fitting the model
+# 5. Fitting the model
 
 Now, use the `fitPMM()` function to fit the mixture model. This function requires several arguments, including the dataset, starting values, and model-specific options such as the number of latent classes and quadrature points.
 
@@ -215,7 +215,7 @@ fit <- fitPMM(
 
 ```
 
-## 5. Model output
+# 6. Model output
 
 The model will return several outputs, including parameter estimates and class memberships.
 
