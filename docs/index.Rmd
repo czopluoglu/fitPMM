@@ -60,30 +60,39 @@ options(scipen=99)
 
 <font color="black">
 
-# Installing and loading support libraries and source files
+#1. Overview
 
-This tutorial demonstrates how to fit the model described in the paper using the R routine we wrote. This routine can be found under the [[/code](https://github.com/czopluoglu/fitPMM/tree/main/code) folder in the associated [GitHub repository](https://github.com/czopluoglu/fitPMM). 
+This tutorial demonstrates how to fit a finite mixture of piecewise mixed-effect models with unknown random knots using the R routine developed as described in [in our paper](https://github.com/czopluoglu/fitPMM/blob/main/paper/2015_Kohli%2C%20Harring%2C%20%26%20Zopluoglu.pdf). The R routine can be found in the [GitHub repository](https://github.com/czopluoglu/fitPMM) under the `/code` folder.
 
-1) Please download the R routine directly from the following link to a local folder in your computer.
+#2. Installation and Setup
 
-[https://raw.githubusercontent.com/czopluoglu/fitPMM/main/code/fitPMM.R](https://raw.githubusercontent.com/czopluoglu/fitPMM/main/code/fitPMM.R)
+## 2.1 Download and Source the R Routine
 
-After you download the file, load it to your R working environment by using the `source()` function. 
+First, download the R script file (fitPMM.R) from the repository and source it into your R environment.
 
-```{r}
+```{r,eval=FALSE,echo=TRUE}
+source('path_to_your_downloaded_code/fitPMM.R')
+
+```
+
+```{r,eval=TRUE,echo=FALSE}
 source(here('code/fitPMM.R'))
 ```
 
-2) Then, you will also need to load a number of R packages as the R routine depends on some functions from these R packages. If you don't have these packages, first intall them, and then load them all in your R environment.
+## 2.2 Install and Load Required Libraries
+
+The routine depends on several R packages. If these are not installed, use install.packages() to install them before loading.
 
 ```{r}
-	# install.packages("segmented",dependencies=TRUE)
-	# install.packages("glmmML",dependencies=TRUE)
-	# install.packages("MCMCpack",dependencies=TRUE)
-	# install.packages("psych",dependencies=TRUE)
-	# install.packages("MBESS",dependencies=TRUE)
-	# install.packages("gdata",dependencies=TRUE)
+# Uncomment the lines to install if needed
+# install.packages("segmented",dependencies=TRUE)
+# install.packages("glmmML",dependencies=TRUE)
+# install.packages("MCMCpack",dependencies=TRUE)
+# install.packages("psych",dependencies=TRUE)
+# install.packages("MBESS",dependencies=TRUE)
+# install.packages("gdata",dependencies=TRUE)
 
+# Load the necessary libraries
 	require(segmented)   # Fitting piecewise model to individual data, used to obtain start values
 	require(glmmML)      # Using "ghq()" function
 	require(MCMCpack)    # Using "xpnd()" function        
@@ -93,7 +102,137 @@ source(here('code/fitPMM.R'))
 
 ```
 
+## 3. Loading the dataset
+
+We will use a random subsample of [The Early Childhood Longitudinal Study (ECLS-K)](http://nces.ed.gov/ecls/) . This dataset tracks children's progress from kindergarten through eighth grade. The time vector (`tvec`) represents specific intervals in the study.
+
+First, download the data file from the folder [/data/](https://github.com/czopluoglu/fitPMM/tree/main/data) in the GitHub repository, and then load it into your R environment
+
+```{r,eval=FALSE,echo=TRUE}
+load(''path_to_your_downloaded_RData_file/ECLS.RData')  # Load the dataset
+tvec <- c(0, 0.5, 1, 1.5, 3.5, 5.5, 8.5)  # Time points vector
+
+head(ECLS)
+```
+
+
+```{r,eval=TRUE,echo=FALSE}
+load(here('data/ECLS.RData'))  # Load the dataset
+tvec <- c(0, 0.5, 1, 1.5, 3.5, 5.5, 8.5)  # Time points vector
+
+head(ECLS)
+```
+
+The time points represent:
+
+- 0   --- Kindergarten (fall)
+- 0.5 --- Kindergarten (spring)
+- 1   --- 1st Grade (fall)
+- 1.5 --- 1st Grade (spring)
+- 3.5 --- 3rd Grade (spring)
+- 5.5 --- 5th Grade (spring)
+- 8.5 --- 8th Grade (spring)
+
+## 4. Generate starting values for the algorithm
+
+The algorithm is sensitive to starting values. To improve convergence, we'll estimate initial parameters (intercepts, slopes, knots, and residual variance) by fitting piecewise models to each individual's data. These estimates will then be passed into the main model fitting function.
+
+```{r}
+
+# Time vector 
+tvec = c(0,.5,1,1.5,3.5,5.5,8.5)  # Time vector
+
+# Sample size, number of rows in the dataset
+
+N <- nrow(ECLS) # Sample size						  
+
+ind_par <- matrix(nrow=N,ncol=5)  # Matrix to store individual parameter estimates
+
+colnames(ind_par) <- c("B1","B2","B3","K","Sigma")  
+
+    # B1   : The intercept at the first phase
+		# B2   : The slope at the first phase
+		# B3   : The slope at the second phase
+		# K    : Knot, change/break point between two phases
+		# sigma: Residual Variance 
+  
+K.st <- 3		# Initial guess for the knot	  		
+
+# The following loop may take some time depending on your sample size. 
+# It fits piecewise linear model to each individual data, 
+# and estimates B1, B2, B3, K, and sigma for each individual
+
+for(i in 1:nrow(ECLS)) {    
+  
+  tryCatch({
+		
+    y <- as.numeric(ECLS[i,])
+		
+		if(sum(is.na(y))<=3){ # Ensure there are enough data points
+		  
+			lm.out <- lm(y~tvec)  
+			
+			out    <- segmented(lm.out,seg.Z=~tvec,psi=K.st) 
+      
+			if(is.null(out)!=TRUE & length(coef(out))==4) {
+       			ind_par[i,1:2] <- as.numeric(coef(out))[1:2]    # B1, B2
+	      		ind_par[i,3] <- ind_par[i,2]+as.numeric(coef(out))[3]  # B3
+			      ind_par[i,4]<- out$psi[2]              # Knot
+      			ind_par[i,5]<- (summary(out)$sigma)^2   # Residual variance
+            	}
+		}
+  }, error=function(e){})
+}
+
+head(ind_par) 	   # Preview of individual estimates     
+	
+```
+
+
+## 5. Fitting the model
+
+Now, use the `fitPMM()` function to fit the mixture model. This function requires several arguments, including the dataset, starting values, and model-specific options such as the number of latent classes and quadrature points.
+
+```{r}
+
+fit <- fitPMM(
+  data     = ECLS,     # Dataset
+  start    = ind_par,  # Starting values
+  time.vec = tvec,     # Time vector
+  L        = 2,        # Number of latent classes
+  nquad    = 20,       # Number of quadrature points
+  isnit_max= 15,       # Max iterations for initial stage
+  is_st    = 0.001,    # Stopping criteria for initial stage
+  is_nset  = 500,      # Number of starting sets for initial stage
+  fsnit_max= 2000,     # Max iterations for final stage
+  fs_st    = 0.0001,   # Stopping criteria for final stage
+  fs_nset  = 3,        # Number of starting sets for final stage
+  sel      = 2,        # Optimization method (1 = BFGS, 2 = DFPQ)
+  fix.cov  = TRUE,    # Fix variance-covariance across classes?
+  fix.err  = TRUE     # Fix residual variance across classes?
+)
+
+
+```
+
+## 5. Model output
+
+The model will return several outputs, including parameter estimates and class memberships.
+
+```{r}
+fit$PAR         # Parameter estimates
+```
+
+```{r}
+fit$CP          # Class proportions
+```
+
+```{r}
+fit$POSTERIOR   # Posterior probabilities and class memberships
+```
 
 </font>
+
+
 
 

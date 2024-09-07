@@ -12,7 +12,7 @@
 
 # IF YOU HAVE QUESTIONS, PLEASE CONTACT ME:
 #	CENGIZ ZOPLUOGLU
-#	E-MAIL ADDRESS: c.zopluoglu@miami.edu
+#	E-MAIL ADDRESS: cengiz@uoregon.edu
 
 ############################################################################################################################
 ############################################################################################################################
@@ -68,17 +68,15 @@ cat("***********************************************************************","\
 cat("An R Routine to Fit Finite Mixture of Piecewise Mixed-Effect Models with Unknown Random Knots","\n")
 cat("","\n")
 cat("Maintainer: Cengiz Zopluoglu","\n")
-cat("            Research, Measurement, and Evaluation Program","\n")
-cat("            Department of Educational and Psychological Studies","\n")
-cat("            University of Miami","\n")
+cat("            University of Oregon","\n")
 cat("","\n")
-cat("Email     : c.zopluoglu@miami.edu","\n")
+cat("Email     : cengiz@uoregon.edu","\n")
 cat("*************************************************************************","\n")
 cat("Please use the following citation for any use of this R routine.","\n")
 cat("","\n")
-cat("     Zopluoglu, C., Harring, J.R., Kohli,N. (2013). An R Routine to fit Piecewise","\n") 
-cat("         Mixed-effects Mixture Models with Random Knots. Applied Psychological","\n") 
-cat("         Measurement,??,",sprintf("%7s","??_??."),"\n") 
+cat("     Zopluoglu, C., Harring, J.R., Kohli,N. (2014). FitPMM: An R Routine to Fit ","\n") 
+cat("         Finite Mixture of Piecewise Mixed-Effect Models With Unknown Random Knots.","\n") 
+cat("         Applied Psychological Measurement, 38(7), 583-584","\n") 
 cat("","\n")
 cat("*************************************************************************","\n")
 cat("","\n")
